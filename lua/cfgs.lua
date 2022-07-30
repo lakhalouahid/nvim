@@ -28,6 +28,8 @@ cmd('filetype plugin on')
 cmd('filetype indent on')
 
 
+-- 
+-- lua la
 cmd('set expandtab')
 cmd('set tabstop=2')
 cmd('set shiftwidth=2')
@@ -56,7 +58,7 @@ cmd('set nobackup')
 cmd('set undofile')
 cmd('set undodir=$HOME/.local/share/nvim/undodir')
 
-cmd('set clipboard=unnamed')
+cmd('set clipboard=unnamedplus')
 cmd('let g:loaded_ruby_provider=0')
 cmd('let g:loaded_perl_provider=0')
 cmd('let g:loaded_python_provider=0')
@@ -66,14 +68,11 @@ cmd('set rtp+=$HOME/.config/nvim')
 
 
 
-
-
 -- stuff
 vim.g.loaded_ruby_provider=0
 vim.env.NVIM_TUI_ENABLE_TRUE_COLOR=1
 vim.g.mapleader=' '
 vim.g.maplocalleader=' '
-
 
 
 -- vim.o.statusline = "%f %= %l,%c %= %p%%"

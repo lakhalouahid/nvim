@@ -7,12 +7,13 @@ return require('packer').startup(function()
   use 'folke/tokyonight.nvim'
   use 'b3nj5m1n/kommentary'
   use 'vim-scripts/ReplaceWithRegister'
-  use { "ellisonleao/gruvbox.nvim"}
   use 'tpope/vim-repeat'
   use 'tpope/vim-surround'
   use {'KabbAmine/vZoom.vim', {on = {'<Plug>(vzoom)', 'VZoomAutoToggle'}}}
-  use {'jpalardy/vim-slime', ft = {'python'}}
-  use {'hanschen/vim-ipython-cell', ft = {'python'}}
+  use {'jpalardy/vim-slime', opt = true, ft = {'python'}}
+  use {'hanschen/vim-ipython-cell', opt = true, ft = {'python'}}
+
+
   use 'junegunn/goyo.vim'
   use 'rstacruz/vim-closer'
   use {'tpope/vim-dispatch', opt = true, cmd = {'Dispatch', 'Make', 'Focus', 'Start'}}
@@ -43,4 +44,6 @@ return require('packer').startup(function()
   use 'xuhdev/vim-latex-live-preview'
   use 'lervag/wiki.vim'
   use 'lambdalisue/suda.vim'
+  use 'nvim-treesitter/nvim-treesitter-textobjects'
+  use "lukas-reineke/indent-blankline.nvim"
 end)

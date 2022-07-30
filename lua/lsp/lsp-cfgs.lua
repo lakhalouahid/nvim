@@ -42,8 +42,7 @@ cmp.setup({
         luasnip.expand_or_jump()
       else
         fallback()
-      end
-    end,
+      end end,
     ['<S-Tab>'] = function(fallback)
       if cmp.visible() then
         cmp.select_prev_item()
@@ -74,7 +73,7 @@ capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 local on_attach = function(client, bufnr)
   local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
   local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
-  client.resolved_capabilities.document_formatting = true
+  client.server_capabilities.document_formatting = true
   -- lsp_status.on_attach(client)
 
   -- Enable completion triggered by <c-x><c-o>
@@ -118,6 +117,16 @@ nvim_lsp.sumneko_lua.setup {
   }
 }
 
+nvim_lsp.clangd.setup {}
+nvim_lsp.clangd.setup{
+  autostart = true,
+  init_options = {formatting = true},
+  capabilities = capabilities,
+  on_attach = on_attach,
+  flags = {
+    debounce_text_changes = 150,
+  }
+}
 
 nvim_lsp.pyright.setup {
   autostart = true,
@@ -129,7 +138,18 @@ nvim_lsp.pyright.setup {
   }
 }
 
-nvim_lsp.ltex.setup{}
+nvim_lsp.tsserver.setup{}
+nvim_lsp.tsserver.setup{
+  autostart = true,
+  init_options = {formatting = true},
+  capabilities = capabilities,
+  on_attach = on_attach,
+  flags = {
+    debounce_text_changes = 150,
+  }
+}
+
+nvim_lsp.ltex.setup {}
 nvim_lsp.ltex.setup {
   cmd = {"ltex-ls"},
   filetypes = {"tex"},
@@ -142,3 +162,25 @@ nvim_lsp.ltex.setup {
   }
 }
 -- vim.o.statusline = "%!luaeval(\"require('lps-status').status()\")"
+require'nvim-treesitter.configs'.setup {
+  textobjects = {
+    select = {
+      enable = true,
+      lookahead = true,
+      keymaps = {
+        ["af"] = "@function.outer",
+        ["if"] = "@function.inner",
+        ["ac"] = "@class.outer",
+        ["ic"] = "@class.inner",
+      },
+    },
+    lsp_interop = {
+      enable = true,
+      border = 'none',
+      peek_definition_code = {
+        ["<leader>df"] = "@function.outer",
+        ["<leader>dF"] = "@class.outer",
+      },
+    },
+  },
+}

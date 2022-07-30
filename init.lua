@@ -1,6 +1,6 @@
 -- load plugins
-require('cfgs')
 require('plugs')
+require('cfgs')
 require('maps')
 
 function lspconfig()

@@ -38,6 +38,8 @@ cmd([[
   nmap <C-w>N :vnew<Cr>
   nmap <leader>S :sp term://
   nmap <leader>v :vsp term://
+  inoremap <C-b> <LEFT>
+  inoremap <C-f> <RIGHT>
 ]])
 
 -- vim fugitive
@@ -45,9 +47,8 @@ cmd([[
   nmap <leader>gs :G<CR>
   nmap <leader>gf :diffget //2<CR>
   nmap <leader>gh :diffget //3<CR>
-  au! TermOpen * redraw!
-  au! TermOpen * setlocal norelativenumber nonumber
 ]])
+
 
 -- easy align
 cmd([[
@@ -72,6 +73,8 @@ cmd([[
   nmap <Leader>iF :IPythonCellRunTime<CR>
   nmap <Leader>ii :IPythonCellExecuteCell<CR>
   nmap <Leader>ic :IPythonCellExecuteCellJump<CR>
+  nmap <Leader>id :SlimeSend1 %debug<CR>
+  nmap <Leader>iq :SlimeSend1 exit()<CR>
 
   nmap [C :IPythonCellPrevCell<CR>
   nmap ]C :IPythonCellNextCell<CR>
@@ -102,6 +105,34 @@ cmd([[
   nmap ]A :last<CR>
 ]])
 
+cmd([[
+  nmap <leader>lh :!rm *.{log,toc,aux,out,nav,snm}<CR>
+  nmap <leader>lc :call jobstart("pdflatex -halt-on-error " .. expand('%')  .. "  >/dev/null")<CR>
+  nmap <leader>ls :!pdflatex -halt-on-error %<CR>
+  nmap <leader>ll :silent LLPStartPreview<CR>
+]])
+
+
+cmd([[
+  nmap <leader>cl :lua lspconfig()<CR>
+  nmap <leader>yf :let @+=expand('%')<CR>
+  nmap <leader>yF :let @+=expand('%:p')<CR>
+]])
+
+
 require('maps.telescope')
 
+vim.api.nvim_create_augroup("removenumbers", { clear = false})
 
+vim.api.nvim_create_autocmd({"TermOpen", "CmdWinEnter"}, {
+  group = "removenumbers",
+  pattern = {"*"},
+  command = "redraw!"
+})
+
+
+vim.api.nvim_create_autocmd({"TermOpen", "CmdWinEnter"}, {
+  group = "removenumbers",
+  pattern = {"*"},
+  command = "setlocal norelativenumber nonumber"
+})
