@@ -20,10 +20,6 @@ cmd([[
 -- clipboard
 cmd([[
   au! TextYankPost * call setreg("+", getreg('"'))
-  nmap <Leader>pp "+p
-  vmap <Leader>pp "+p
-  nmap <Leader>pP "+P
-  vmap <Leader>pP "+P
 ]])
 
 
@@ -36,8 +32,6 @@ cmd([[
 -- terminal
 cmd([[
   nmap <C-w>N :vnew<Cr>
-  nmap <leader>S :sp term://
-  nmap <leader>v :vsp term://
   inoremap <C-b> <LEFT>
   inoremap <C-f> <RIGHT>
 ]])
@@ -50,12 +44,6 @@ cmd([[
 ]])
 
 
--- easy align
-cmd([[
-  xmap ga <Plug>(EasyAlign)
-  nmap ga <Plug>(EasyAlign)
-]])
-
 -- command-window
 cmd([[
   cmap <A-s> <c-right>
@@ -63,22 +51,24 @@ cmd([[
 ]])
 
 -- map slime
-cmd([[
-  nmap <Leader>is <Plug>SlimeRegionSend<CR>
-  vmap <Leader>is <Plug>SlimeRegionSend<CR>
-  nmap <Leader>il <Plug>SlimeLineSend<CR>
-  nmap <Leader>io <Plug>SlimeMotionSend<CR>
-  vmap <Leader>id <Plug>IPythonShowDoc<CR>
-  nmap <Leader>if :IPythonCellRun<CR>
-  nmap <Leader>iF :IPythonCellRunTime<CR>
-  nmap <Leader>ii :IPythonCellExecuteCell<CR>
-  nmap <Leader>ic :IPythonCellExecuteCellJump<CR>
-  nmap <Leader>id :SlimeSend1 %debug<CR>
-  nmap <Leader>iq :SlimeSend1 exit()<CR>
+function maps_slime()
+  cmd([[
+    nmap <Leader>is <Plug>SlimeRegionSend<CR>
+    vmap <Leader>is <Plug>SlimeRegionSend<CR>
+    nmap <Leader>il <Plug>SlimeLineSend<CR>
+    nmap <Leader>io <Plug>SlimeMotionSend<CR>
+    vmap <Leader>id <Plug>IPythonShowDoc<CR>
+    nmap <Leader>if :IPythonCellRun<CR>
+    nmap <Leader>iF :IPythonCellRunTime<CR>
+    nmap <Leader>ii :IPythonCellExecuteCell<CR>
+    nmap <Leader>ic :IPythonCellExecuteCellJump<CR>
+    nmap <Leader>id :SlimeSend1 %debug<CR>
+    nmap <Leader>iq :SlimeSend1 exit()<CR>
 
-  nmap [C :IPythonCellPrevCell<CR>
-  nmap ]C :IPythonCellNextCell<CR>
-]])
+    nmap [C :IPythonCellPrevCell<CR>
+    nmap ]C :IPythonCellNextCell<CR>
+  ]])
+end
 
 cmd([[
   nmap <C-W>o <nop>
@@ -119,8 +109,6 @@ cmd([[
   nmap <leader>yF :let @+=expand('%:p')<CR>
 ]])
 
-
-require('maps.telescope')
 
 vim.api.nvim_create_augroup("removenumbers", { clear = false})
 

@@ -14,20 +14,16 @@ return require('packer').startup(function()
   use {'hanschen/vim-ipython-cell', opt = true, ft = {'python'}}
 
 
-  use 'junegunn/goyo.vim'
-  use 'rstacruz/vim-closer'
-  use {'tpope/vim-dispatch', opt = true, cmd = {'Dispatch', 'Make', 'Focus', 'Start'}}
   use {'andymass/vim-matchup', event = 'VimEnter'}
   use 'nvim-lua/plenary.nvim'
-  use 'nvim-telescope/telescope-fzy-native.nvim'
-  use 'nvim-telescope/telescope.nvim'
+
 
   -- nvim-lspconfig
   use 'nvim-treesitter/nvim-treesitter'
   use 'dmitmel/cmp-digraphs'
   use 'milisims/nvim-luaref'
   use 'neovim/nvim-lspconfig'
-  use 'hrsh7th/cmp-nvim-lsp'
+  use 'klhrsh7th/cmp-nvim-lsp'
   use 'hrsh7th/cmp-path'
   use 'hrsh7th/cmp-emoji'
   use 'hrsh7th/nvim-cmp'
@@ -39,10 +35,12 @@ return require('packer').startup(function()
 
   -- Awesome tpope Plugins
   use 'tpope/vim-fugitive'
+
+  -- easy align
+  use 'RRethy/nvim-align'
   
   -- latex
-  use 'xuhdev/vim-latex-live-preview'
-  use 'lervag/wiki.vim'
+  use {'xuhdev/vim-latex-live-preview', opt = true, ft = {'tex'}}
   use 'lambdalisue/suda.vim'
   use 'nvim-treesitter/nvim-treesitter-textobjects'
   use "lukas-reineke/indent-blankline.nvim"

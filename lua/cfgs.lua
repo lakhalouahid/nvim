@@ -1,9 +1,3 @@
-local set_opt = function(...) vim.api.nvim_set_option(...) end
-local set_on = function(option) vim.api.nvim_set_option(option, true) end
-local set_off = function(option) vim.api.nvim_set_option(option, false) end
-local cmd = function(...) vim.api.nvim_command(...) end
-
--- cmd('colorscheme tatl$e')
 cmd('set ruler')
 cmd('set nowrap')
 cmd('set encoding=utf-8')
@@ -28,8 +22,8 @@ cmd('filetype plugin on')
 cmd('filetype indent on')
 
 
--- 
--- lua la
+
+-- lua
 cmd('set expandtab')
 cmd('set tabstop=2')
 cmd('set shiftwidth=2')
