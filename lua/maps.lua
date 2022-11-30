@@ -51,24 +51,19 @@ cmd([[
 ]])
 
 -- map slime
-function maps_slime()
-  cmd([[
-    nmap <Leader>is <Plug>SlimeRegionSend<CR>
-    vmap <Leader>is <Plug>SlimeRegionSend<CR>
-    nmap <Leader>il <Plug>SlimeLineSend<CR>
-    nmap <Leader>io <Plug>SlimeMotionSend<CR>
-    vmap <Leader>id <Plug>IPythonShowDoc<CR>
-    nmap <Leader>if :IPythonCellRun<CR>
-    nmap <Leader>iF :IPythonCellRunTime<CR>
-    nmap <Leader>ii :IPythonCellExecuteCell<CR>
-    nmap <Leader>ic :IPythonCellExecuteCellJump<CR>
-    nmap <Leader>id :SlimeSend1 %debug<CR>
-    nmap <Leader>iq :SlimeSend1 exit()<CR>
+cmd([[
+nmap <Leader>is <Plug>SlimeRegionSend<CR>
+vmap <Leader>is <Plug>SlimeRegionSend<CR>
+nmap <Leader>il <Plug>SlimeLineSend<CR>
+nmap <Leader>io <Plug>SlimeMotionSend<CR>
+vmap <Leader>id <Plug>IPythonShowDoc<CR>
+nmap <Leader>if :IPythonCellRun<CR>
+nmap <Leader>ii :IPythonCellExecuteCell<CR>
+nmap <Leader>ic :IPythonCellExecuteCellJump<CR>
 
-    nmap [C :IPythonCellPrevCell<CR>
-    nmap ]C :IPythonCellNextCell<CR>
-  ]])
-end
+nmap [C :IPythonCellPrevCell<CR>
+nmap ]C :IPythonCellNextCell<CR>
+]])
 
 cmd([[
   nmap <C-W>o <nop>
@@ -97,8 +92,9 @@ cmd([[
 
 cmd([[
   nmap <leader>lh :!rm *.{log,toc,aux,out,nav,snm}<CR>
-  nmap <leader>lc :call jobstart("pdflatex -halt-on-error " .. expand('%')  .. "  >/dev/null")<CR>
-  nmap <leader>ls :!pdflatex -halt-on-error %<CR>
+  nmap <leader>lc :call jobstart("lualatex -shell-escape --halt-on-error " .. expand('%')  .. "  >/dev/null")<CR>
+
+  nmap <leader>ls :!export VIMLATEXDIR=/tmp/vim-latex-live-preview-$(randstr 8) && cp -r %:h $VIMLATEXDIR && cd $VIMLATEXDIR && lualatex -shell-escape --halt-on-error %:t<CR>
   nmap <leader>ll :silent LLPStartPreview<CR>
 ]])
 
@@ -106,21 +102,29 @@ cmd([[
 cmd([[
   nmap <leader>cl :lua lspconfig()<CR>
   nmap <leader>yf :let @+=expand('%')<CR>
-  nmap <leader>yF :let @+=expand('%:p')<CR>
+  nmap <leader>yy :let @+=getcwd()<CR>
+  nmap <leader>yd :let @+=expand('%:t')<CR>
+  nmap <leader>yp :let @+=expand('%:p')<CR>
 ]])
 
-
-vim.api.nvim_create_augroup("removenumbers", { clear = false})
+vim.api.nvim_create_augroup("terminal", { clear = false})
 
 vim.api.nvim_create_autocmd({"TermOpen", "CmdWinEnter"}, {
-  group = "removenumbers",
+  group = "terminal",
   pattern = {"*"},
   command = "redraw!"
 })
-
-
 vim.api.nvim_create_autocmd({"TermOpen", "CmdWinEnter"}, {
-  group = "removenumbers",
+  group = "terminal",
   pattern = {"*"},
   command = "setlocal norelativenumber nonumber"
 })
+
+vim.api.nvim_create_augroup("lspgopls", { clear = false})
+vim.api.nvim_create_autocmd({"BufWritePre"}, {
+  group = "lspgopls",
+  pattern = {"*.go"},
+  command = ":lua go_org_imports(1000) vim.lsp.buf.format()"
+})
+
+

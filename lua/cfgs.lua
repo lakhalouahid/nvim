@@ -16,7 +16,7 @@ cmd('set exrc')
 cmd('set nowrapscan')
 cmd('set updatetime=200')
 cmd('set belloff=all')
-cmd('syntax enable')
+-- cmd('syntax enable')
 cmd('filetype on')
 cmd('filetype plugin on')
 cmd('filetype indent on')
@@ -25,8 +25,8 @@ cmd('filetype indent on')
 
 -- lua
 cmd('set expandtab')
-cmd('set tabstop=2')
-cmd('set shiftwidth=2')
+cmd('set tabstop=4')
+cmd('set shiftwidth=4')
 cmd('set smarttab')
 cmd('set smartindent')
 cmd('set autoindent')
@@ -67,6 +67,7 @@ vim.g.loaded_ruby_provider=0
 vim.env.NVIM_TUI_ENABLE_TRUE_COLOR=1
 vim.g.mapleader=' '
 vim.g.maplocalleader=' '
+vim.g.mkdp_browser='qutebrowser'
 
 
 -- vim.o.statusline = "%f %= %l,%c %= %p%%"
