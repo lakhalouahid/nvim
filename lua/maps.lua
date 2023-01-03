@@ -128,3 +128,10 @@ vim.api.nvim_create_autocmd({"BufWritePre"}, {
 })
 
 
+
+vim.api.nvim_create_augroup("rust-analyzer", { clear = false})
+vim.api.nvim_create_autocmd({"BufWritePre"}, {
+  group = "rust-analyzer",
+  pattern = {"*.rs"},
+  command = ":lua vim.lsp.buf.format()"
+})

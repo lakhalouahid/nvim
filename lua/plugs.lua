@@ -10,8 +10,8 @@ return require('packer').startup(function()
     use 'tpope/vim-repeat'
     use 'tpope/vim-surround'
     use {'KabbAmine/vZoom.vim', {on = {'<Plug>(vzoom)', 'VZoomAutoToggle'}}}
-    use {'jpalardy/vim-slime', opt = true, ft = {'python'}}
-    use {'hanschen/vim-ipython-cell', opt = true, ft = {'python'}}
+    use {'jpalardy/vim-slime'}
+    use {'hanschen/vim-ipython-cell'}
 
 
     use {'andymass/vim-matchup', event = 'VimEnter'}
@@ -24,6 +24,7 @@ return require('packer').startup(function()
     use 'milisims/nvim-luaref'
     use 'neovim/nvim-lspconfig'
     use 'hrsh7th/cmp-nvim-lsp'
+    use 'hrsh7th/cmp-nvim-lua'
     use 'hrsh7th/cmp-path'
     use 'hrsh7th/cmp-emoji'
     use 'hrsh7th/nvim-cmp'
