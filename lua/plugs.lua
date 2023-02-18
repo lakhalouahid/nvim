@@ -4,7 +4,6 @@
 
 return require('packer').startup(function()
     use 'wbthomason/packer.nvim'
-    -- use 'catppuccin/nvim'
 
     use 'folke/tokyonight.nvim'
     use 'b3nj5m1n/kommentary'

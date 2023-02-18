@@ -9,7 +9,6 @@ require('maps')
 
 
 
-
 local lspconfig = function ()
     require('treesitter-cfgs')
     require('nvim-tree').setup({
@@ -31,10 +30,10 @@ local lspconfig = function ()
     })
     require('cfgs.lsp')
     require('lsp.lsp-cfgs')
+    require('chatgpt').setup({})
 end
 
 if vim.g.setup == "max" then
     lspconfig()
 end
 
-require('chatgpt').setup({})

@@ -1,22 +1,31 @@
 vim.o.completeopt = 'menuone,noselect'
 require("luasnip.loaders.from_snipmate").load({ path = "~/.local/share/nvim/vim-snippets" }) -- opts can be ommited
 
-
 -- luasnip setup
 local luasnip = require 'luasnip'
 luasnip.filetype_extend("javascript", {"javascriptreact"})
 luasnip.filetype_extend("javascript", {"html"})
 
 local nvim_lsp = require('lspconfig')
-require'lsp_extensions'.inlay_hints{ enabled = {"ChainingHint", "TypeHint", "ParameterHint"} } 
 local util = require("lspconfig/util")
+local lsp_extensions = require('lsp_extensions')
+local nvim_autopairs = require("nvim-autopairs")
+local cmp = require('cmp')
+
+
 local root_pattern = nvim_lsp.util.root_pattern
+lsp_extensions.inlay_hints{ enabled = {"ChainingHint", "TypeHint", "ParameterHint"} } 
+
+--[[ -- status lsp
+local lsp_status = require('lsp-status')
+lsp_status.register_progress() ]]
 
 -- nvim-cmp setup
 
-local cmp = require('cmp')
-require("nvim-autopairs").setup {}
+nvim_autopairs.setup({})
+
 local cmp_autopairs = require('nvim-autopairs.completion.cmp')
+
 cmp.event:on(
     'confirm_done',
     cmp_autopairs.on_confirm_done()
@@ -248,6 +257,7 @@ nvim_lsp.texlab.setup {
     }
 }
 
+
 --[[ nvim_lsp.grammarly.setup {
     cmd = { "grammarly-languageserver", "--stdio" },
     filetypes = { "markdown" },
@@ -294,6 +304,3 @@ nvim_lsp.rust_analyzer.setup({
     }
 })
 
-
--- vim.o.statusline = "%!luaeval(\"require('lps-status').status()\")"
--- require'lspconfig'.grammarly.setup{}
