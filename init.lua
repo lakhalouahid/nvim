@@ -5,8 +5,25 @@ cmd = function(...) vim.api.nvim_command(...) end
 require('plugs')
 require('cfgs')
 require('maps')
-require('maps')
 require('treesitter-cfgs')
+
+require("nvim-tree").setup({
+  sort_by = "case_sensitive",
+  view = {
+    adaptive_size = true,
+    mappings = {
+      list = {
+        { key = "u", action = "dir_up" },
+      },
+    },
+  },
+  renderer = {
+    group_empty = true,
+  },
+  filters = {
+    dotfiles = true,
+  },
+})
 
 
 if vim.g.setup == "max" then
@@ -20,5 +37,4 @@ function lspconfig()
   require('lsp.lsp-cfgs')
 end
 
-
-
+require('chatgpt').setup({})

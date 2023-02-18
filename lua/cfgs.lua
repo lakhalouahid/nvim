@@ -59,6 +59,7 @@ cmd('let g:loaded_python_provider=0')
 cmd('let g:python_recommended_style=0')
 cmd('set rtp+=$HOME/.local/share/nvim/lua')
 cmd('set rtp+=$HOME/.config/nvim')
+cmd('set mouse=n')
 
 
 
@@ -67,7 +68,7 @@ vim.g.loaded_ruby_provider=0
 vim.env.NVIM_TUI_ENABLE_TRUE_COLOR=1
 vim.g.mapleader=' '
 vim.g.maplocalleader=' '
-vim.g.mkdp_browser='qutebrowser'
+vim.g.mkdp_browser='google-chrome'
 
 
 -- vim.o.statusline = "%f %= %l,%c %= %p%%"
@@ -79,3 +80,5 @@ require('cfgs.slime')
 require('cfgs.vim-latex-live-preview')
 require('cfgs.vimwiki')
 require('cfgs.evil_lualine')
+
+cmd('set cmdheight=1')

@@ -56,10 +56,28 @@ return require('packer').startup(function()
     run = function() vim.fn["mkdp#util#install"]() end,
     })
 
-    use {
-        'nvim-lualine/lualine.nvim',
-        'kyazdani42/nvim-web-devicons'
-    }
+    -- use 'nvim-lualine/lualine.nvim'
+    --
+    use 'nvim-lua/lsp-status.nvim'
+    use 'kyazdani42/nvim-web-devicons'
 
     use({ "iamcco/markdown-preview.nvim", run = "cd app && npm install", setup = function() vim.g.mkdp_filetypes = { "markdown" } end, ft = { "markdown" }, })
+    use 'nvim-tree/nvim-tree.lua'
+    -- Packer
+    use "MunifTanjim/nui.nvim"
+    use({
+        "jackMort/ChatGPT.nvim",
+        requires = {
+            "MunifTanjim/nui.nvim",
+            "nvim-lua/plenary.nvim",
+            "nvim-telescope/telescope.nvim"
+        }
+    })
+
+    use ({
+        'nvim-telescope/telescope.nvim', tag = '0.1.1',
+        requires = { {'nvim-lua/plenary.nvim'} }
+    })
+
+
 end)
