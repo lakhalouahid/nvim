@@ -4,6 +4,8 @@
 
 return require('packer').startup(function()
     use 'wbthomason/packer.nvim'
+    -- use 'catppuccin/nvim'
+
     use 'folke/tokyonight.nvim'
     use 'b3nj5m1n/kommentary'
     use 'vim-scripts/ReplaceWithRegister'
@@ -41,25 +43,36 @@ return require('packer').startup(function()
     use 'RRethy/nvim-align'
 
     -- latex
-    use {'xuhdev/vim-latex-live-preview', opt = true, ft = {'tex'}}
     use 'lambdalisue/suda.vim'
     use 'nvim-treesitter/nvim-treesitter-textobjects'
     use "lukas-reineke/indent-blankline.nvim"
-    use 'lervag/wiki.vim'
     use "windwp/nvim-autopairs"
     use 'kana/vim-textobj-entire'
     use 'kana/vim-textobj-user'
 
-    -- install without yarn or npm
-    use({
-    "iamcco/markdown-preview.nvim",
-    run = function() vim.fn["mkdp#util#install"]() end,
-    })
 
-    use {
-        'nvim-lualine/lualine.nvim',
-        'kyazdani42/nvim-web-devicons'
-    }
+    -- use 'nvim-lualine/lualine.nvim'
+    --
+    use 'kyazdani42/nvim-web-devicons'
 
     use({ "iamcco/markdown-preview.nvim", run = "cd app && npm install", setup = function() vim.g.mkdp_filetypes = { "markdown" } end, ft = { "markdown" }, })
+    use 'nvim-tree/nvim-tree.lua'
+    -- Packer
+    use "MunifTanjim/nui.nvim"
+    use({
+        "jackMort/ChatGPT.nvim",
+        requires = {
+            "MunifTanjim/nui.nvim",
+            "nvim-lua/plenary.nvim",
+            "nvim-telescope/telescope.nvim"
+        }
+    })
+
+    use ({
+        'nvim-telescope/telescope.nvim', tag = '0.1.1',
+        requires = { {'nvim-lua/plenary.nvim'} }
+    })
+
+    use 'nvim-lua/lsp_extensions.nvim';
+
 end)

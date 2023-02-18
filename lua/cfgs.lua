@@ -6,8 +6,7 @@ cmd('set title')
 cmd('set hidden')
 cmd('set scrolloff=0')
 cmd('set signcolumn=no')
-cmd('set colorcolumn=0')
-cmd('set cmdheight=1')
+cmd('set colorcolumn=0') cmd('set cmdheight=1')
 cmd('set shortmess+=c')
 cmd('set noshowmode')
 cmd('set nohlsearch')
@@ -21,6 +20,8 @@ cmd('filetype on')
 cmd('filetype plugin on')
 cmd('filetype indent on')
 
+--[[ cmd('let &t_8f = "<Esc>[38;2;%lu;%lu;%lum"')
+cmd('let &t_8b = "<Esc>[48;2;%lu;%lu;%lum"') ]]
 
 
 -- lua
@@ -59,6 +60,7 @@ cmd('let g:loaded_python_provider=0')
 cmd('let g:python_recommended_style=0')
 cmd('set rtp+=$HOME/.local/share/nvim/lua')
 cmd('set rtp+=$HOME/.config/nvim')
+cmd('set mouse=n')
 
 
 
@@ -67,15 +69,18 @@ vim.g.loaded_ruby_provider=0
 vim.env.NVIM_TUI_ENABLE_TRUE_COLOR=1
 vim.g.mapleader=' '
 vim.g.maplocalleader=' '
-vim.g.mkdp_browser='qutebrowser'
+vim.g.mkdp_browser='google-chrome'
 
 
 -- vim.o.statusline = "%f %= %l,%c %= %p%%"
 -- colorscheme
 require('cfgs.colorscheme')
-cmd('highlight WinSeparator guifg=None')
+-- cmd[[colorscheme catppuccin]]
+cmd('highlight WinSeparator guifg=None') 
 
 require('cfgs.slime')
 require('cfgs.vim-latex-live-preview')
 require('cfgs.vimwiki')
 require('cfgs.evil_lualine')
+
+cmd('set cmdheight=1')

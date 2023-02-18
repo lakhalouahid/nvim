@@ -107,8 +107,25 @@ cmd([[
   nmap <leader>yp :let @+=expand('%:p')<CR>
 ]])
 
-vim.api.nvim_create_augroup("terminal", { clear = false})
+cmd([[
+  nmap <leader>cl :lua lspconfig()<CR>
+  nmap <leader>yf :let @+=expand('%')<CR>
+  nmap <leader>yy :let @+=getcwd()<CR>
+  nmap <leader>yd :let @+=expand('%:t')<CR>
+  nmap <leader>yp :let @+=expand('%:p')<CR>
+]])
 
+cmd([[
+  map <A-u> :ChatGPT<CR>
+  map <A-U> :ChatGPTActAs<CR>
+]])
+
+cmd([[
+  nmap <leader>n :NvimTreeToggle<CR>
+]])
+
+
+vim.api.nvim_create_augroup("terminal", { clear = false})
 vim.api.nvim_create_autocmd({"TermOpen", "CmdWinEnter"}, {
   group = "terminal",
   pattern = {"*"},
@@ -135,3 +152,5 @@ vim.api.nvim_create_autocmd({"BufWritePre"}, {
   pattern = {"*.rs"},
   command = ":lua vim.lsp.buf.format()"
 })
+
+require('maps.telescope')
