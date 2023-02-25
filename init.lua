@@ -2,14 +2,20 @@ set_opt = function(...) vim.api.nvim_set_option(...) end
 cmd = function(...) vim.api.nvim_command(...) end
 
 
+TelescopeFolders = {
+  ["vim"]= '~/.config/nvim',
+  ["sources"] = '~/sources',
+  ["projects"] = "~/projects",
+  ["downloads"] = "~/Downloads"
+}
+
 -- load plugins
 require('plugs')
 require('cfgs')
 require('maps')
 
 
-
-local lspconfig = function ()
+lspconfig = function ()
     require('treesitter-cfgs')
     require('nvim-tree').setup({
         sort_by = "case_sensitive",
@@ -36,4 +42,7 @@ end
 if vim.g.setup == "max" then
     lspconfig()
 end
+
+
+
 
