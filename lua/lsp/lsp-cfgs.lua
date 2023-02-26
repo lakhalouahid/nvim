@@ -8,13 +8,15 @@ luasnip.filetype_extend("javascript", { "html" })
 
 local nvim_lsp = require('lspconfig')
 local util = require("lspconfig/util")
-local lsp_extensions = require('lsp_extensions')
+local inlay_hints = require('lsp_extensions.inlay_hints')
 local nvim_autopairs = require("nvim-autopairs")
 local cmp = require('cmp')
 
 
+
+
+
 local root_pattern = nvim_lsp.util.root_pattern
-lsp_extensions.inlay_hints { enabled = { "ChainingHint", "TypeHint", "ParameterHint" } }
 
 --[[ -- status lsp
 local lsp_status = require('lsp-status')
@@ -25,10 +27,22 @@ nvim_autopairs.setup({})
 
 local cmp_autopairs = require('nvim-autopairs.completion.cmp')
 
+
+function ShowInlineInlayHints()
+    vim.lsp.buf_request(0, 'rust_analyzer/inlayHints', inlay_hints.get_params(),
+        inlay_hints.get_callback { only_current_line = true,
+            enabled = { "TypeHint", "ChainingHint", "ParameterHint" },
+            highlight = "Comment",
+            prefix = " > ",
+            aligned = false,
+        })
+end
+
 cmp.event:on(
     'confirm_done',
     cmp_autopairs.on_confirm_done()
 )
+
 cmp.setup({
     snippet = {
         expand = function(args)
@@ -38,7 +52,7 @@ cmp.setup({
     mapping = {
         ['<C-p>'] = cmp.mapping.select_prev_item(),
         ['<C-n>'] = cmp.mapping.select_next_item(),
-        ['<C-d>'] = cmp.mapping.scroll_docs( -4),
+        ['<C-d>'] = cmp.mapping.scroll_docs(-4),
         ['<C-f>'] = cmp.mapping.scroll_docs(4),
         ['<C-Space>'] = cmp.mapping.complete(),
         ['<C-e>'] = cmp.mapping.close(),
@@ -56,8 +70,8 @@ cmp.setup({
             end
         end,
         ['<S-Tab>'] = function(fallback)
-            if luasnip.jumpable( -1) then
-                luasnip.jump( -1)
+            if luasnip.jumpable(-1) then
+                luasnip.jump(-1)
             elseif cmp.visible() then
                 cmp.select_prev_item()
             else
@@ -85,8 +99,8 @@ capabilities.textDocument.completion.completionItem.snippetSupport = true
 -- Enable some language servers with the additional completion capabilities offered by nvim-cmp
 local on_attach = function(client, bufnr)
     local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
-    local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
 
+    local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
 
     --[[ vim.cmd([[
     augroup format_document
@@ -94,24 +108,34 @@ local on_attach = function(client, bufnr)
         au BufWritePre *.rs <buffer> lua vim.lsp.buf.format()
     augroup END
     ]]
-    vim.cmd [[
-    augroup document_highlight
-        au!
-        au CursorHold <buffer> lua vim.lsp.buf.document_highlight()
-        au CursorMoved <buffer> lua vim.lsp.buf.clear_references()
-    augroup END
-    ]]
 
-    if client.server_capabilities.format_document then
+    if client.server_capabilities.documentFormattingProvider and client.server_capabilities.referencesProvider then
         vim.cmd [[
-    augroup document_format
-        au!
-        au BufWritePre <buffer> lua vim.lsp.buf.format()
-    augroup END
-    ]]
+        augroup document_highlight
+            au!
+            au CursorHold <buffer> lua vim.lsp.buf.document_highlight()
+            au CursorMoved <buffer> lua vim.lsp.buf.clear_references()
+        augroup END
+        ]]
     end
 
+    if client.server_capabilities.documentFormattingProvider then
+        vim.cmd [[
+        augroup document_format
+            au!
+            au BufWritePre <buffer> lua vim.lsp.buf.format()
+        augroup END
+        ]]
+    end
 
+    --[[
+    vim.cmd [[
+        augroup ShowLineHints
+        au!
+        au CursorHold,CursorHoldI,CursorMoved <buffer> lua ShowInlineInlayHints()
+        augroup END
+    \]\]
+    ]]
 
     -- Enable completion triggered by <c-x><c-o>
     buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
@@ -146,7 +170,7 @@ local on_attach = function(client, bufnr)
 end
 
 -- Use a loop to conveniently call 'setup' on multiple servers and
-nvim_lsp.lua_ls.setup {
+nvim_lsp.sumneko_lua.setup {
     autostart = true,
     init_options = { formatting = true },
     capabilities = capabilities,
