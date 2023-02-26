@@ -5,10 +5,10 @@ map('n', '<m-a>', '<c-w>', {})
 -- tabs movements
 cmd([[
   nmap tn :tabnew<CR>
-  nmap tj :tabn<CR>
-  nmap tl :+tabm<CR>
-  nmap tk :tabp<CR>
-  nmap th :-tabm<CR>
+  nmap th :tabn<CR>
+  nmap tk :+tabm<CR>
+  nmap tl :tabp<CR>
+  nmap tj :-tabm<CR>
 ]])
 
 -- visual shifting
@@ -121,8 +121,10 @@ cmd([[
 ]])
 
 cmd([[
-  nmap <leader>n :NvimTreeToggle<CR>
+  map <A-u> :ChatGPT<CR>
+  map <A-U> :ChatGPTActAs<CR>
 ]])
+
 
 
 vim.api.nvim_create_augroup("terminal", { clear = false})
@@ -131,26 +133,14 @@ vim.api.nvim_create_autocmd({"TermOpen", "CmdWinEnter"}, {
   pattern = {"*"},
   command = "redraw!"
 })
+
 vim.api.nvim_create_autocmd({"TermOpen", "CmdWinEnter"}, {
   group = "terminal",
   pattern = {"*"},
   command = "setlocal norelativenumber nonumber"
 })
 
-vim.api.nvim_create_augroup("lspgopls", { clear = false})
-vim.api.nvim_create_autocmd({"BufWritePre"}, {
-  group = "lspgopls",
-  pattern = {"*.go"},
-  command = ":lua go_org_imports(1000) vim.lsp.buf.format()"
-})
-
-
-
-vim.api.nvim_create_augroup("rust-analyzer", { clear = false})
-vim.api.nvim_create_autocmd({"BufWritePre"}, {
-  group = "rust-analyzer",
-  pattern = {"*.rs"},
-  command = ":lua vim.lsp.buf.format()"
-})
-
-require('maps.telescope')
+local function buf_set_keymap(...) vim.api.nvim_set_keymap(...) end
+local opts = { noremap=true, silent=false }
+buf_set_keymap('i', '<A-c>', '<cmd>lua require("copilot.suggestion").accept()<CR>', opts)
+buf_set_keymap('i', '<A-l>', '<cmd>lua require("copilot.suggestion").accept_line()<CR>', opts)

@@ -3,8 +3,8 @@ require("luasnip.loaders.from_snipmate").load({ path = "~/.local/share/nvim/vim-
 
 -- luasnip setup
 local luasnip = require 'luasnip'
-luasnip.filetype_extend("javascript", {"javascriptreact"})
-luasnip.filetype_extend("javascript", {"html"})
+luasnip.filetype_extend("javascript", { "javascriptreact" })
+luasnip.filetype_extend("javascript", { "html" })
 
 local nvim_lsp = require('lspconfig')
 local util = require("lspconfig/util")
@@ -14,12 +14,11 @@ local cmp = require('cmp')
 
 
 local root_pattern = nvim_lsp.util.root_pattern
-lsp_extensions.inlay_hints{ enabled = {"ChainingHint", "TypeHint", "ParameterHint"} } 
+lsp_extensions.inlay_hints { enabled = { "ChainingHint", "TypeHint", "ParameterHint" } }
 
 --[[ -- status lsp
 local lsp_status = require('lsp-status')
 lsp_status.register_progress() ]]
-
 -- nvim-cmp setup
 
 nvim_autopairs.setup({})
@@ -39,7 +38,7 @@ cmp.setup({
     mapping = {
         ['<C-p>'] = cmp.mapping.select_prev_item(),
         ['<C-n>'] = cmp.mapping.select_next_item(),
-        ['<C-d>'] = cmp.mapping.scroll_docs(-4),
+        ['<C-d>'] = cmp.mapping.scroll_docs( -4),
         ['<C-f>'] = cmp.mapping.scroll_docs(4),
         ['<C-Space>'] = cmp.mapping.complete(),
         ['<C-e>'] = cmp.mapping.close(),
@@ -57,8 +56,8 @@ cmp.setup({
             end
         end,
         ['<S-Tab>'] = function(fallback)
-            if luasnip.jumpable(-1) then
-                luasnip.jump(-1)
+            if luasnip.jumpable( -1) then
+                luasnip.jump( -1)
             elseif cmp.visible() then
                 cmp.select_prev_item()
             else
@@ -86,11 +85,33 @@ capabilities.textDocument.completion.completionItem.snippetSupport = true
 -- Enable some language servers with the additional completion capabilities offered by nvim-cmp
 local on_attach = function(client, bufnr)
     local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
-
     local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
 
-    client.server_capabilities.document_formatting = true
-    -- lsp_status.on_attach(client)
+
+    --[[ vim.cmd([[
+    augroup format_document
+        au!
+        au BufWritePre *.rs <buffer> lua vim.lsp.buf.format()
+    augroup END
+    ]]
+    vim.cmd [[
+    augroup document_highlight
+        au!
+        au CursorHold <buffer> lua vim.lsp.buf.document_highlight()
+        au CursorMoved <buffer> lua vim.lsp.buf.clear_references()
+    augroup END
+    ]]
+
+    if client.server_capabilities.format_document then
+        vim.cmd [[
+    augroup document_format
+        au!
+        au BufWritePre <buffer> lua vim.lsp.buf.format()
+    augroup END
+    ]]
+    end
+
+
 
     -- Enable completion triggered by <c-x><c-o>
     buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
@@ -122,7 +143,6 @@ local on_attach = function(client, bufnr)
     buf_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
     buf_set_keymap('n', '<space>ql', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
     buf_set_keymap('n', '<space>qf', '<cmd>lua vim.lsp.buf.format({async = true})<CR>', opts)
-
 end
 
 -- Use a loop to conveniently call 'setup' on multiple servers and
@@ -139,13 +159,13 @@ nvim_lsp.lua_ls.setup {
 nvim_lsp.clangd.setup {
     autostart = true,
     filetypes = { "c", "cpp", "objc", "objcpp", "cuda", "proto" },
-    root_dir = root_pattern(          '.clangd',
-          '.clang-tidy',
-          '.clang-format',
-          'compile_commands.json',
-          'compile_flags.txt',
-          'configure.ac',
-          '.git'),
+    root_dir = root_pattern('.clangd',
+        '.clang-tidy',
+        '.clang-format',
+        'compile_commands.json',
+        'compile_flags.txt',
+        'configure.ac',
+        '.git'),
     init_options = { formatting = true },
     capabilities = capabilities,
     on_attach = on_attach,
@@ -204,19 +224,6 @@ nvim_lsp.gopls.setup {
     }
 }
 
-function go_org_imports(wait_ms)
-    local params = vim.lsp.util.make_range_params()
-    params.context = { only = { "source.organizeImports" } }
-    local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, wait_ms)
-    for cid, res in pairs(result or {}) do
-        for _, r in pairs(res.result or {}) do
-            if r.edit then
-                local enc = (vim.lsp.get_client_by_id(cid) or {}).offset_encoding or "utf-16"
-                vim.lsp.util.apply_workspace_edit(r.edit, enc)
-            end
-        end
-    end
-end
 
 nvim_lsp.cssls.setup {
     filetypes = { "css", "scss", "less" },
@@ -232,7 +239,7 @@ nvim_lsp.html.setup {
     filetypes = { "html" },
     autostart = true,
     init_options = {
-        configurationSection = { "html", "css", "javascript" },
+        configurationSection = { "html", "css", "javascript", "javascriptreact" },
         embeddedLanguages = {
             css = true,
             javascript = true
@@ -248,6 +255,18 @@ nvim_lsp.html.setup {
 nvim_lsp.texlab.setup {
     cmd = { "texlab" },
     filetypes = { "tex" },
+    autostart = true,
+    init_options = { formatting = true },
+    capabilities = capabilities,
+    on_attach = on_attach,
+    flags = {
+        debounce_text_changes = 150,
+    }
+}
+
+nvim_lsp.emmet_ls.setup {
+    cmd = { "emmet-ls", "--stdio" },
+    filetypes = { "html", "typescriptreact", "javascriptreact", "css", "sass", "scss", "less", "eruby" },
     autostart = true,
     init_options = { formatting = true },
     capabilities = capabilities,
@@ -274,7 +293,6 @@ nvim_lsp.texlab.setup {
         debounce_text_changes = 150,
     }
 } ]]
-
 ---- vim.o.statusline = "%!luaeval(\"require('lps-status').status()\")"
 
 
@@ -285,4 +303,3 @@ nvim_lsp.rust_analyzer.setup({
     capabilities = capabilities,
     on_attach = on_attach,
 })
-

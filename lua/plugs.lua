@@ -4,18 +4,18 @@
 
 return require('packer').startup(function()
     use 'wbthomason/packer.nvim'
-
+    use 'brenoprata10/nvim-highlight-colors'
     use 'folke/tokyonight.nvim'
     use 'b3nj5m1n/kommentary'
     use 'vim-scripts/ReplaceWithRegister'
     use 'tpope/vim-repeat'
     use 'tpope/vim-surround'
-    use {'KabbAmine/vZoom.vim', {on = {'<Plug>(vzoom)', 'VZoomAutoToggle'}}}
-    use {'jpalardy/vim-slime'}
-    use {'hanschen/vim-ipython-cell'}
+    use { 'KabbAmine/vZoom.vim', { on = { '<Plug>(vzoom)', 'VZoomAutoToggle' } } }
+    use { 'jpalardy/vim-slime' }
+    use { 'hanschen/vim-ipython-cell' }
 
 
-    use {'andymass/vim-matchup', event = 'VimEnter'}
+    use { 'andymass/vim-matchup', event = 'VimEnter' }
     use 'nvim-lua/plenary.nvim'
 
 
@@ -54,7 +54,8 @@ return require('packer').startup(function()
     --
     use 'kyazdani42/nvim-web-devicons'
 
-    use({ "iamcco/markdown-preview.nvim", run = "cd app && npm install", setup = function() vim.g.mkdp_filetypes = { "markdown" } end, ft = { "markdown" }, })
+    use({ "iamcco/markdown-preview.nvim", run = "cd app && npm install",
+        setup = function() vim.g.mkdp_filetypes = { "markdown" } end, ft = { "markdown" }, })
     use 'nvim-tree/nvim-tree.lua'
     -- Packer
     use "MunifTanjim/nui.nvim"
@@ -69,11 +70,17 @@ return require('packer').startup(function()
 
     use "nvim-telescope/telescope-fzy-native.nvim"
 
-    use ({
+    use({
         'nvim-telescope/telescope.nvim',
-        requires = { {'nvim-lua/plenary.nvim'} }
+        requires = { { 'nvim-lua/plenary.nvim' } }
     })
 
-    use 'nvim-lua/lsp_extensions.nvim';
 
+    use {
+        'nvim-lua/lsp_extensions.nvim',
+    }
+
+    use {
+        "zbirenbaum/copilot.lua",
+    }
 end)

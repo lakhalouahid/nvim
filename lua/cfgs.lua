@@ -84,3 +84,7 @@ require('cfgs.vimwiki')
 require('cfgs.evil_lualine')
 
 cmd('set cmdheight=1')
+
+require('nvim-highlight-colors').setup{}
+
+require('copilot').setup({})
