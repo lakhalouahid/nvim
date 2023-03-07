@@ -54,8 +54,12 @@ return require('packer').startup(function()
     --
     use 'kyazdani42/nvim-web-devicons'
 
-    use({ "iamcco/markdown-preview.nvim", run = "cd app && npm install",
-        setup = function() vim.g.mkdp_filetypes = { "markdown" } end, ft = { "markdown" }, })
+    use({
+        "iamcco/markdown-preview.nvim",
+        run = "cd app && npm install",
+        setup = function() vim.g.mkdp_filetypes = { "markdown" } end,
+        ft = { "markdown" },
+    })
     use 'nvim-tree/nvim-tree.lua'
     -- Packer
     use "MunifTanjim/nui.nvim"
@@ -83,4 +87,6 @@ return require('packer').startup(function()
     use {
         "zbirenbaum/copilot.lua",
     }
+
+    use 'simrat39/inlay-hints.nvim'
 end)

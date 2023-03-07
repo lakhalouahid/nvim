@@ -8,7 +8,6 @@ luasnip.filetype_extend("javascript", { "html" })
 
 local nvim_lsp = require('lspconfig')
 local util = require("lspconfig/util")
-local inlay_hints = require('lsp_extensions.inlay_hints')
 local nvim_autopairs = require("nvim-autopairs")
 local cmp = require('cmp')
 
@@ -28,16 +27,6 @@ nvim_autopairs.setup({})
 local cmp_autopairs = require('nvim-autopairs.completion.cmp')
 
 
-function ShowInlineInlayHints()
-    vim.lsp.buf_request(0, 'rust_analyzer/inlayHints', inlay_hints.get_params(),
-        inlay_hints.get_callback { only_current_line = true,
-            enabled = { "TypeHint", "ChainingHint", "ParameterHint" },
-            highlight = "Comment",
-            prefix = " > ",
-            aligned = false,
-        })
-end
-
 cmp.event:on(
     'confirm_done',
     cmp_autopairs.on_confirm_done()
@@ -52,7 +41,7 @@ cmp.setup({
     mapping = {
         ['<C-p>'] = cmp.mapping.select_prev_item(),
         ['<C-n>'] = cmp.mapping.select_next_item(),
-        ['<C-d>'] = cmp.mapping.scroll_docs(-4),
+        ['<C-d>'] = cmp.mapping.scroll_docs( -4),
         ['<C-f>'] = cmp.mapping.scroll_docs(4),
         ['<C-Space>'] = cmp.mapping.complete(),
         ['<C-e>'] = cmp.mapping.close(),
@@ -70,8 +59,8 @@ cmp.setup({
             end
         end,
         ['<S-Tab>'] = function(fallback)
-            if luasnip.jumpable(-1) then
-                luasnip.jump(-1)
+            if luasnip.jumpable( -1) then
+                luasnip.jump( -1)
             elseif cmp.visible() then
                 cmp.select_prev_item()
             else
@@ -95,6 +84,8 @@ capabilities.textDocument.completion.completionItem.snippetSupport = true
 
 
 
+local ih = require("inlay-hints")
+ih.setup({})
 
 -- Enable some language servers with the additional completion capabilities offered by nvim-cmp
 local on_attach = function(client, bufnr)
@@ -108,7 +99,6 @@ local on_attach = function(client, bufnr)
         au BufWritePre *.rs <buffer> lua vim.lsp.buf.format()
     augroup END
     ]]
-
     if client.server_capabilities.documentFormattingProvider and client.server_capabilities.referencesProvider then
         vim.cmd [[
         augroup document_highlight
@@ -128,6 +118,8 @@ local on_attach = function(client, bufnr)
         ]]
     end
 
+    ih.on_attach(client, bufnr)
+
     --[[
     vim.cmd [[
         augroup ShowLineHints
@@ -136,7 +128,6 @@ local on_attach = function(client, bufnr)
         augroup END
     \]\]
     ]]
-
     -- Enable completion triggered by <c-x><c-o>
     buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
 
@@ -163,6 +154,7 @@ local on_attach = function(client, bufnr)
     buf_set_keymap('n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
     buf_set_keymap('n', '<space>gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
     buf_set_keymap('n', '<space>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
+    buf_set_keymap('n', '<space>c', '<cmd>cclose<CR>', opts)
     buf_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
     buf_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
     buf_set_keymap('n', '<space>ql', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
@@ -170,7 +162,7 @@ local on_attach = function(client, bufnr)
 end
 
 -- Use a loop to conveniently call 'setup' on multiple servers and
-nvim_lsp.sumneko_lua.setup {
+nvim_lsp.lua_ls.setup {
     autostart = true,
     init_options = { formatting = true },
     capabilities = capabilities,
@@ -326,4 +318,19 @@ nvim_lsp.rust_analyzer.setup({
     init_options = { formatting = true },
     capabilities = capabilities,
     on_attach = on_attach,
+    settings = {
+        ["rust-analyzer"] = {
+            inlayHints = {
+                typeHints = {
+                    enable = true
+                },
+                chainingHints = {
+                    enable = true
+                },
+                parameterHints = {
+                    enable = true
+                },
+            },
+        },
+    }
 })

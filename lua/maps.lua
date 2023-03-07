@@ -109,6 +109,7 @@ cmd([[
 
 cmd([[
   nmap <leader>cl :lua lspconfig()<CR>
+  nmap <leader>nl :NvimTreeToggle<CR>
   nmap <leader>yf :let @+=expand('%')<CR>
   nmap <leader>yy :let @+=getcwd()<CR>
   nmap <leader>yd :let @+=expand('%:t')<CR>
@@ -127,20 +128,22 @@ cmd([[
 
 
 
-vim.api.nvim_create_augroup("terminal", { clear = false})
-vim.api.nvim_create_autocmd({"TermOpen", "CmdWinEnter"}, {
-  group = "terminal",
-  pattern = {"*"},
-  command = "redraw!"
+vim.api.nvim_create_augroup("terminal", { clear = false })
+vim.api.nvim_create_autocmd({ "TermOpen", "CmdWinEnter" }, {
+    group = "terminal",
+    pattern = { "*" },
+    command = "redraw!"
 })
 
-vim.api.nvim_create_autocmd({"TermOpen", "CmdWinEnter"}, {
-  group = "terminal",
-  pattern = {"*"},
-  command = "setlocal norelativenumber nonumber"
+vim.api.nvim_create_autocmd({ "TermOpen", "CmdWinEnter" }, {
+    group = "terminal",
+    pattern = { "*" },
+    command = "setlocal norelativenumber nonumber"
 })
 
 local function buf_set_keymap(...) vim.api.nvim_set_keymap(...) end
-local opts = { noremap=true, silent=false }
+local opts = { noremap = true, silent = false }
 buf_set_keymap('i', '<A-c>', '<cmd>lua require("copilot.suggestion").accept()<CR>', opts)
 buf_set_keymap('i', '<A-l>', '<cmd>lua require("copilot.suggestion").accept_line()<CR>', opts)
+
+require('maps.telescope')
