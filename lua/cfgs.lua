@@ -5,8 +5,9 @@ cmd('set nocompatible')
 cmd('set title')
 cmd('set hidden')
 cmd('set scrolloff=0')
-cmd('set signcolumn=no')
-cmd('set colorcolumn=0') cmd('set cmdheight=1')
+cmd('set signcolumn=yes')
+cmd('set colorcolumn=0')
+cmd('set cmdheight=1')
 cmd('set shortmess+=c')
 cmd('set noshowmode')
 cmd('set nohlsearch')
@@ -65,18 +66,19 @@ cmd('set mouse=n')
 
 
 -- stuff
-vim.g.loaded_ruby_provider=0
-vim.env.NVIM_TUI_ENABLE_TRUE_COLOR=1
-vim.g.mapleader=' '
-vim.g.maplocalleader=' '
-vim.g.mkdp_browser='google-chrome'
+vim.g.loaded_ruby_provider = 0
+vim.env.NVIM_TUI_ENABLE_TRUE_COLOR = 1
+vim.g.mapleader = ' '
+vim.g.maplocalleader = ' '
+vim.g.mkdp_browser = 'google-chrome'
+vim.g.surround_map_insert_mode = false
 
 
 -- vim.o.statusline = "%f %= %l,%c %= %p%%"
 -- colorscheme
 require('cfgs.colorscheme')
 -- cmd[[colorscheme catppuccin]]
-cmd('highlight WinSeparator guifg=None') 
+cmd('highlight WinSeparator guifg=None')
 
 require('cfgs.slime')
 require('cfgs.vim-latex-live-preview')
@@ -85,6 +87,7 @@ require('cfgs.evil_lualine')
 
 cmd('set cmdheight=1')
 
-require('nvim-highlight-colors').setup{}
+require('nvim-highlight-colors').setup {}
 
 require('copilot').setup({})
+-- require('cfgs.move')

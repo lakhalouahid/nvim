@@ -2,27 +2,24 @@ vim.o.completeopt = 'menuone,noselect'
 require("luasnip.loaders.from_snipmate").load({ path = "~/.local/share/nvim/vim-snippets" }) -- opts can be ommited
 
 -- luasnip setup
-local luasnip = require 'luasnip'
+--[[ local luasnip = require 'luasnip'
 luasnip.filetype_extend("javascript", { "javascriptreact" })
-luasnip.filetype_extend("javascript", { "html" })
+luasnip.filetype_extend("javascript", { "html" }) ]]
 
 local nvim_lsp = require('lspconfig')
 local util = require("lspconfig/util")
-local nvim_autopairs = require("nvim-autopairs")
 local cmp = require('cmp')
-
 
 
 
 
 local root_pattern = nvim_lsp.util.root_pattern
 
---[[ -- status lsp
+--[[ -- status lsplsp-c
 local lsp_status = require('lsp-status')
 lsp_status.register_progress() ]]
 -- nvim-cmp setup
 
-nvim_autopairs.setup({})
 
 local cmp_autopairs = require('nvim-autopairs.completion.cmp')
 
@@ -33,15 +30,10 @@ cmp.event:on(
 )
 
 cmp.setup({
-    snippet = {
-        expand = function(args)
-            luasnip.lsp_expand(args.body)
-        end,
-    },
     mapping = {
         ['<C-p>'] = cmp.mapping.select_prev_item(),
         ['<C-n>'] = cmp.mapping.select_next_item(),
-        ['<C-d>'] = cmp.mapping.scroll_docs( -4),
+        ['<C-d>'] = cmp.mapping.scroll_docs(-4),
         ['<C-f>'] = cmp.mapping.scroll_docs(4),
         ['<C-Space>'] = cmp.mapping.complete(),
         ['<C-e>'] = cmp.mapping.close(),
@@ -50,18 +42,14 @@ cmp.setup({
             select = true,
         },
         ['<Tab>'] = function(fallback)
-            if luasnip.expand_or_jumpable() then
-                luasnip.expand_or_jump()
-            elseif cmp.visible() then
+            if cmp.visible() then
                 cmp.select_next_item()
             else
                 fallback()
             end
         end,
         ['<S-Tab>'] = function(fallback)
-            if luasnip.jumpable( -1) then
-                luasnip.jump( -1)
-            elseif cmp.visible() then
+            if cmp.visible() then
                 cmp.select_prev_item()
             else
                 fallback()
@@ -72,7 +60,6 @@ cmp.setup({
         { name = 'nvim_lsp' },
         { name = 'nvim_lua' },
         { name = 'emoji' },
-        { name = 'luasnip' },
         { name = 'path' },
     },
 });
@@ -144,8 +131,8 @@ local on_attach = function(client, bufnr)
     buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
     buf_set_keymap('n', '<space>sh', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
     buf_set_keymap('i', '<C-Space>', '<cmd>lua vim.lsp.buf.completion()<CR>', opts)
-    buf_set_keymap('i', '<C-s>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-    buf_set_keymap('n', '<C-s>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+    buf_set_keymap('i', '<C-h>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+    buf_set_keymap('n', '<C-h>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
     buf_set_keymap('n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
     buf_set_keymap('n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
     buf_set_keymap('n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
@@ -162,7 +149,7 @@ local on_attach = function(client, bufnr)
 end
 
 -- Use a loop to conveniently call 'setup' on multiple servers and
-nvim_lsp.lua_ls.setup {
+nvim_lsp.sumneko_lua.setup {
     autostart = true,
     init_options = { formatting = true },
     capabilities = capabilities,
@@ -243,6 +230,16 @@ nvim_lsp.gopls.setup {
 
 nvim_lsp.cssls.setup {
     filetypes = { "css", "scss", "less" },
+    autostart = true,
+    capabilities = capabilities,
+    on_attach = on_attach,
+    flags = {
+        debounce_text_changes = 150,
+    }
+}
+
+nvim_lsp.bashls.setup {
+    filetypes = { "sh", "bash" },
     autostart = true,
     capabilities = capabilities,
     on_attach = on_attach,
@@ -334,3 +331,5 @@ nvim_lsp.rust_analyzer.setup({
         },
     }
 })
+
+require 'lspconfig'.sqlls.setup {}

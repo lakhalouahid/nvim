@@ -5,10 +5,10 @@ map('n', '<m-a>', '<c-w>', {})
 -- tabs movements
 cmd([[
   nmap tn :tabnew<CR>
-  nmap th :tabn<CR>
-  nmap tk :+tabm<CR>
-  nmap tl :tabp<CR>
-  nmap tj :-tabm<CR>
+  nmap tl :tabn<CR>
+  nmap tL :+tabm<CR>
+  nmap th :tabp<CR>
+  nmap tH :-tabm<CR>
 ]])
 
 -- visual shifting
@@ -29,18 +29,28 @@ cmd([[
   nmap <Leader>fi :set foldmethod=indent<CR>
 ]])
 
+cmd([[
+  nmap <Leader>fs :set foldmethod=syntax<CR>
+  nmap <Leader>fi :set foldmethod=indent<CR>
+]])
+
 -- terminal
 cmd([[
   nmap <C-w>N :vnew<Cr>
   inoremap <C-b> <LEFT>
   inoremap <C-f> <RIGHT>
+  inoremap <C-e> <C-o>$
+  inoremap <C-a> <C-o>^
+  inoremap <C-s> <Nop>
+  inoremap <C-s> <C-O>:w<CR>
 ]])
 
 -- vim fugitive
 cmd([[
-  nmap <leader>gs :G<CR>
+  nmap <leader>gs :G<CR>:wincmd 14_<CR>
   nmap <leader>gf :diffget //2<CR>
   nmap <leader>gh :diffget //3<CR>
+  nmap <leader>gd :Gvdiffsplit 
 ]])
 
 
@@ -68,7 +78,7 @@ nmap ]C :IPythonCellNextCell<CR>
 cmd([[
   nmap <C-W>o <nop>
   nmap <C-W>o <Plug>(vzoom)
-  tmap <M-s> <C-\><C-n>
+  tmap <Esc> <C-\><C-n>
 ]])
 
 cmd([[
@@ -110,6 +120,7 @@ cmd([[
 cmd([[
   nmap <leader>cl :lua lspconfig()<CR>
   nmap <leader>nl :NvimTreeToggle<CR>
+  nmap <leader>nf :NvimTreeFocus<CR>
   nmap <leader>yf :let @+=expand('%')<CR>
   nmap <leader>yy :let @+=getcwd()<CR>
   nmap <leader>yd :let @+=expand('%:t')<CR>
@@ -123,6 +134,7 @@ cmd([[
 
 cmd([[
   map <A-u> :ChatGPT<CR>
+  imap <C-y> <RIGHT><LEFT><RIGHT><BS>
   map <A-U> :ChatGPTActAs<CR>
 ]])
 
@@ -138,12 +150,22 @@ vim.api.nvim_create_autocmd({ "TermOpen", "CmdWinEnter" }, {
 vim.api.nvim_create_autocmd({ "TermOpen", "CmdWinEnter" }, {
     group = "terminal",
     pattern = { "*" },
-    command = "setlocal norelativenumber nonumber"
+    command = "setlocal norelativenumber nonumber signcolumn=no"
+})
+
+vim.api.nvim_create_autocmd('Filetype', {
+    group = "terminal",
+    pattern = { 'dap-repl' },
+    command = 'setlocal norelativenumber nonumber signcolumn=no'
 })
 
 local function buf_set_keymap(...) vim.api.nvim_set_keymap(...) end
+
 local opts = { noremap = true, silent = false }
-buf_set_keymap('i', '<A-c>', '<cmd>lua require("copilot.suggestion").accept()<CR>', opts)
+buf_set_keymap('i', '<A-L>', '<cmd>lua require("copilot.suggestion").accept()<CR>', opts)
 buf_set_keymap('i', '<A-l>', '<cmd>lua require("copilot.suggestion").accept_line()<CR>', opts)
+buf_set_keymap('n', '<A-L>', '<cmd>lua require("copilot.suggestion").accept()<CR>', opts)
+buf_set_keymap('n', '<A-l>', '<cmd>lua require("copilot.suggestion").accept_line()<CR>', opts)
 
 require('maps.telescope')
+require('maps.dap')

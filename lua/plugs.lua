@@ -9,7 +9,6 @@ return require('packer').startup(function()
     use 'b3nj5m1n/kommentary'
     use 'vim-scripts/ReplaceWithRegister'
     use 'tpope/vim-repeat'
-    use 'tpope/vim-surround'
     use { 'KabbAmine/vZoom.vim', { on = { '<Plug>(vzoom)', 'VZoomAutoToggle' } } }
     use { 'jpalardy/vim-slime' }
     use { 'hanschen/vim-ipython-cell' }
@@ -89,4 +88,16 @@ return require('packer').startup(function()
     }
 
     use 'simrat39/inlay-hints.nvim'
+
+    use 'lervag/wiki.vim'
+
+
+    use "ur4ltz/surround.nvim"
+
+    use 'mfussenegger/nvim-dap'
+    use 'mfussenegger/nvim-dap-python'
+    use 'rcarriga/nvim-dap-ui'
+    use 'nvim-telescope/telescope-dap.nvim'
+
+    -- use 'fedepujol/move.nvim'
 end)
